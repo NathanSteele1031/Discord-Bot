@@ -55,12 +55,12 @@ def main():
                 return
             elif user_loaded(message.author.id, users_loaded):
                 player_data = users_loaded[message.author.id]
-                await message.channel.send(f'Level: {player_data.level}')
+                await message.channel.send(f'Level: {player_data.level}\nItems: {player_data.items}')
                 return
 
             name = message.content[6:]
             if name in players:
-                await message.channel.send(f'Level: {players[name].level}')
+                await message.channel.send(f'Level: {players[name].level}\nItems: {players[name].items}')
             else:
                 await message.channel.send('Player not found')
 
@@ -116,6 +116,7 @@ def main():
             user = message.author
             player_name = message.content[6:]
             users_loaded[user.id] = players[player_name]
+            await message.channel.send(f'Loaded player {player_name} to {user.name}')
 
     # 3. Run it
     client.run(input('Enter your token: '))
