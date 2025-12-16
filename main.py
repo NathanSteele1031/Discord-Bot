@@ -16,9 +16,12 @@ def get_player_names():
 
 def main():
     player_names = get_player_names()
+    print(player_names)
     players = {}
 
     for name in player_names:
+        if name == "":
+            continue
         players[name] = player.Player(f"UserData/{name}.json")
 
     for name, user in players.items():
@@ -95,7 +98,7 @@ def main():
                 await message.channel.send('Player not found')
 
     # 3. Run it
-    client.run(get_token(input('Enter your token: ')))
+    client.run(input('Enter your token: '))
 
 if __name__ == "__main__":
     main()
