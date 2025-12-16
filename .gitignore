@@ -1,6 +1,7 @@
 Scripts/
 Lib/
 *.cfg
+UserData/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
