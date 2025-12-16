@@ -13,6 +13,9 @@ def get_player_names():
         with open('UserData/players.txt', 'w') as f:
             pass
         return []
+    
+def user_loaded(user_id, users_loaded):
+    return True if user_id in users_loaded else False
 
 def main():
     player_names = get_player_names()
@@ -47,8 +50,12 @@ def main():
             return
 
         if message.content.startswith('!show'):
-            if message.content.strip() == '!show':
+            if message.content.strip() == '!show' and not user_loaded(message.author.id, users_loaded):
                 await message.channel.send('Please specify a player name')
+                return
+            elif user_loaded(message.author.id, users_loaded):
+                player_data = users_loaded[message.author.id]
+                await message.channel.send(f'Level: {player_data.level}')
                 return
 
             name = message.content[6:]
@@ -88,8 +95,14 @@ def main():
                 await message.channel.send('Player not found')
 
         if message.content.startswith("!levelup"):
-            if message.content.strip() == '!levelup':
+            if message.content.strip() == '!levelup' and not user_loaded(message.author.id, users_loaded):
                 await message.channel.send('Please specify a player name')
+            elif user_loaded(message.author.id, users_loaded):
+                player_data = users_loaded[message.author.id]
+                player_data.level += 1
+                player_data.save(f"UserData/{player_data.name}.json")
+                await message.channel.send(f'⭐⭐{player_data.name} has leveled up to level {player_data.level}⭐⭐')
+                return
             
             name = message.content[9:]
             if name in players:
