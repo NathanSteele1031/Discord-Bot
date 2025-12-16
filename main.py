@@ -82,6 +82,18 @@ def main():
             else:
                 await message.channel.send('Player not found')
 
+        if message.content.startswith("!levelup"):
+            if message.content.strip() == '!levelup':
+                await message.channel.send('Please specify a player name')
+            
+            name = message.content[9:]
+            if name in players:
+                players[name].level += 1
+                players[name].save(f"UserData/{name}.json")
+                await message.channel.send(f'⭐⭐{name} has leveled up to level {players[name].level}⭐⭐')
+            else:
+                await message.channel.send('Player not found')
+
     # 3. Run it
     client.run(get_token(input('Enter your token: ')))
 
