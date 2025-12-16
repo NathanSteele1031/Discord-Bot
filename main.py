@@ -19,6 +19,8 @@ def main():
     print(player_names)
     players = {}
 
+    users_loaded = {}
+
     for name in player_names:
         if name == "":
             continue
@@ -96,6 +98,11 @@ def main():
                 await message.channel.send(f'⭐⭐{name} has leveled up to level {players[name].level}⭐⭐')
             else:
                 await message.channel.send('Player not found')
+
+        if message.content.startswith("!load"):
+            user = message.author
+            player_name = message.content[6:]
+            users_loaded[user.id] = players[player_name]
 
     # 3. Run it
     client.run(input('Enter your token: '))
