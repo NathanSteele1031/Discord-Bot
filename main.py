@@ -79,6 +79,7 @@ def main():
             !create <name> - Creates a player
             !levelup <name> - Levels up a player
             !additem <name> - Adds an item to a player
+            !addskill <name> - Adds a skill to a player
             ''')
 
         if message.content.startswith("!showplayers"):
