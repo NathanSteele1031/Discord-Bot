@@ -15,6 +15,9 @@ class Player:
         """
 
         self.owner = owner
+    
+    def is_owner(self, user_id):
+        return self.owner == user_id
 
     def load(self, file):
         with open(file, 'r') as f:
