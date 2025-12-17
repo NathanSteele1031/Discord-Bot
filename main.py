@@ -15,7 +15,11 @@ def get_player_names():
         return []
     
 def user_loaded(user_id, users_loaded):
-    return True if user_id in users_loaded else False
+    return True if user_id in users_loaded.keys() else False
+
+def remove_from_load(player_name, users_loaded):
+    if player_name in users_loaded:
+        del users_loaded[player_name]
 
 def main():
     player_names = get_player_names()
@@ -48,6 +52,24 @@ def main():
         # Don't let the bot reply to itself (infinite loop prevention)
         if message.author == client.user:
             return
+        
+        if message.content.startswith("!help"):
+            await message.channel.send('''
+            Commands:
+            !showplayers - Shows all players
+            !load <name> - Loads a player so you don't have to type the player name for commands
+            !show <name> - Shows a specific player
+            !create <name> - Creates a player
+            !remove <name> - Removes a player
+            !levelup <name> - Levels up a player
+            !additem <name> - Adds an item to a player
+            ''')
+
+        if message.content.startswith("!showplayers"):
+            if player_names != [] or player_names != [""]:
+                await message.channel.send("\n".join(player_names))
+            else:
+                await message.channel.send("None have been made! Make some with !create <name>")
 
         if message.content.startswith('!show'):
             if message.content.strip() == '!show' and not user_loaded(message.author.id, users_loaded):
@@ -87,6 +109,7 @@ def main():
             if name in players:
                 del players[name]
                 player_names.remove(name)
+                remove_from_load(name, users_loaded)
                 os.remove(f"UserData/{name}.json")
                 with open('UserData/players.txt', 'w') as f:
                     f.write("\n".join(player_names))
@@ -109,6 +132,24 @@ def main():
                 players[name].level += 1
                 players[name].save(f"UserData/{name}.json")
                 await message.channel.send(f'⭐⭐{name} has leveled up to level {players[name].level}⭐⭐')
+            else:
+                await message.channel.send('Player not found')
+
+        if message.content.startswith("!additem"):
+            if message.content.strip() == '!additem' and not user_loaded(message.author.id, users_loaded):
+                await message.channel.send('Please specify a player name')
+            elif user_loaded(message.author.id, users_loaded):
+                player_data = users_loaded[message.author.id]
+                player_data.items.append(message.content[9:])
+                player_data.save(f"UserData/{player_data.name}.json")
+                await message.channel.send(f'Added {message.content[9:]} to {player_data.name}')
+                return
+            
+            name = message.content[9:]
+            if name in players:
+                players[name].items.append(message.content[9:])
+                players[name].save(f"UserData/{name}.json")
+                await message.channel.send(f'Added {message.content[9:]} to {name}')
             else:
                 await message.channel.send('Player not found')
 
