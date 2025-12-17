@@ -33,7 +33,10 @@ def get_gm_id():
 
 def save_gm_id(gm_id):
     with open('UserData/gm.txt', 'w') as f:
-        f.write(str(gm_id))
+        if gm_id == None:
+            f.write("")
+        else:
+            f.write(str(gm_id))
 
 def main():
     player_names = get_player_names()
@@ -211,9 +214,23 @@ def main():
                 await message.channel.send('Player not found')
 
         if message.content.startswith("!gmme"):
+            if is_gm(message.author.id, gm_id):
+                await message.channel.send('You are already the GM')
+                return
+            if gm_id:
+                await message.channel.send('There is already a GM')
+                return
             gm_id = message.author.id
             save_gm_id(gm_id)
             await message.channel.send(f'GM set to {message.author.name}')
+
+        if message.content.startswith("!cleargm"):
+            if not is_gm(message.author.id, gm_id):
+                await message.channel.send('You are not the GM')
+                return
+            gm_id = None
+            save_gm_id(gm_id)
+            await message.channel.send('GM cleared')
 
     # 3. Run it
     client.run(input('Enter your token: '))
