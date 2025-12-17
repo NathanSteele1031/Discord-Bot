@@ -95,6 +95,7 @@ def main():
                 await message.channel.send('Player already exists')
             else:
                 players[name] = player.Player()
+                players[name].set_owner(message.author.id)
                 player_names.append(name)
                 with open('UserData/players.txt', 'w') as f:
                     f.write("\n".join(player_names))
