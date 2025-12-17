@@ -7,6 +7,7 @@ class Player:
             self.items = []
             self.owner = None
             self.name = name
+            self.skills = [] # Lists of lists [skill, levelunlocked]
         else:
             self.load(file)
     
@@ -27,6 +28,7 @@ class Player:
             self.items = data['items']
             self.owner = data['owner']
             self.name = data['name']
+            self.skills = data['skills']
         
     def save(self, file):
         with open(file, 'w') as f:
@@ -34,5 +36,6 @@ class Player:
                 'level': self.level,
                 'items': self.items,
                 'owner': self.owner,
-                'name': self.name
+                'name': self.name,
+                'skills': self.skills
             }, f)
