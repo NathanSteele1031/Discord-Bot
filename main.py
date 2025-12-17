@@ -70,10 +70,10 @@ def main():
             await message.channel.send('''
             Commands:
             !showplayers - Shows all players
-            !load <name> - Loads a player so you don't have to type the player name for commands
+            !remove <name> - Removes a player
+            !load <name> - Loads a player so you don't have to type the player name for commands below
             !show <name> - Shows a specific player
             !create <name> - Creates a player
-            !remove <name> - Removes a player
             !levelup <name> - Levels up a player
             !additem <name> - Adds an item to a player
             ''')
@@ -121,7 +121,7 @@ def main():
                 await message.channel.send('Please specify a player name')
             
             name = message.content[8:]
-            if name in players:
+            if name in players and players[name].is_owner(message.author.id):
                 del players[name]
                 player_names.remove(name)
                 remove_from_load(name, users_loaded)
