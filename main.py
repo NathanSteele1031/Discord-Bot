@@ -201,7 +201,7 @@ def main():
                 player_data = users_loaded[message.author.id]
                 player_data.skills.append([message_split[1], int(message_split[2])])
                 player_data.save(f"UserData/{player_data.name}.json")
-                await message.channel.send(f'Added {message.content[11:]} to {player_data.name}')
+                await message.channel.send(f'Added {message_split[1]} to {player_data.name}')
                 return
             
             message_split = message.content.split(' ')
