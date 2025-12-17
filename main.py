@@ -21,12 +21,21 @@ def remove_from_load(player_name, users_loaded):
     if player_name in users_loaded:
         del users_loaded[player_name]
 
+def is_gm(user_id, gm_id):
+    return True if user_id == gm_id else False
+
+def get_gm_id():
+    with open('UserData/gm.txt', 'r') as f:
+        return f.read()
+
+def save_gm_id(gm_id):
+    with open('UserData/gm.txt', 'w') as f:
+        f.write(gm_id)
+
 def main():
     player_names = get_player_names()
     print(player_names)
     players = {}
-
-    gm_id = None
 
     users_loaded = {}
 
@@ -51,6 +60,8 @@ def main():
 
     @client.event
     async def on_message(message):
+        gm_id = get_gm_id()
+
         # Don't let the bot reply to itself (infinite loop prevention)
         if message.author == client.user:
             return
@@ -149,11 +160,14 @@ def main():
                 await message.channel.send(f'Added {message.content[9:]} to {player_data.name}')
                 return
             
-            name = message.content[9:]
-            if name in players:
-                players[name].items.append(message.content[9:])
+            message_split = message.content.split(' ')
+            name = message_split[1]
+            if name in players and (players[name].is_owner(message.author.id) or message.author.id == is_gm(message.author.id, gm_id)):
+                players[name].items.append(message_split[2])
                 players[name].save(f"UserData/{name}.json")
                 await message.channel.send(f'Added {message.content[9:]} to {name}')
+            elif message.author.id != is_gm(message.author.id, gm_id):
+                await message.channel.send('You do not own this player')
             else:
                 await message.channel.send('Player not found')
 
@@ -168,6 +182,7 @@ def main():
 
         if message.content.startswith("!gmme"):
             gm_id = message.author.id
+            save_gm_id(gm_id)
             await message.channel.send(f'GM set to {message.author.name}')
 
     # 3. Run it
