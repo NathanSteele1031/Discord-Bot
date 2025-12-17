@@ -84,7 +84,7 @@ def main():
             else:
                 await message.channel.send("None have been made! Make some with !create <name>")
 
-        if message.content.startswith('!show'):
+        if message.content.startswith('!show') and not message.content.startswith("!showplayers"):
             if message.content.strip() == '!show' and not user_loaded(message.author.id, users_loaded):
                 await message.channel.send('Please specify a player name')
                 return
