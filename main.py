@@ -26,6 +26,8 @@ def main():
     print(player_names)
     players = {}
 
+    gm_id = None
+
     users_loaded = {}
 
     for name in player_names:
@@ -163,6 +165,10 @@ def main():
                 await message.channel.send(f'Loaded player {player_name} to {user.name}')
             else:
                 await message.channel.send('You do not own this player')
+
+        if message.content.startswith("!gmme"):
+            gm_id = message.author.id
+            await message.channel.send(f'GM set to {message.author.name}')
 
     # 3. Run it
     client.run(input('Enter your token: '))
