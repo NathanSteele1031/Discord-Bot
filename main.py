@@ -166,7 +166,7 @@ def main():
                 players[name].items.append(message_split[2])
                 players[name].save(f"UserData/{name}.json")
                 await message.channel.send(f'Added {message.content[9:]} to {name}')
-            elif message.author.id != is_gm(message.author.id, gm_id):
+            elif name in players and message.author.id != is_gm(message.author.id, gm_id):
                 await message.channel.send('You do not own this player')
             else:
                 await message.channel.send('Player not found')
