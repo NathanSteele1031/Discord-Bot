@@ -26,11 +26,11 @@ def is_gm(user_id, gm_id):
 
 def get_gm_id():
     with open('UserData/gm.txt', 'r') as f:
-        return f.read()
+        return int(f.read())
 
 def save_gm_id(gm_id):
     with open('UserData/gm.txt', 'w') as f:
-        f.write(gm_id)
+        f.write(str(gm_id))
 
 def main():
     player_names = get_player_names()
