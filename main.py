@@ -76,6 +76,8 @@ def main():
             await message.channel.send('''
             Commands:
             !showplayers - Shows all players
+            !gmme - GMs the author
+            !cleargm - Clears the GM
             !remove <name> - Removes a player
             !load <name> - Loads a player so you don't have to type the player name for commands below
             !show <name> - Shows a specific player
