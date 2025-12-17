@@ -26,7 +26,10 @@ def is_gm(user_id, gm_id):
 
 def get_gm_id():
     with open('UserData/gm.txt', 'r') as f:
-        return int(f.read())
+        data = f.read()
+        if data == "":
+            return None
+        return int(data)
 
 def save_gm_id(gm_id):
     with open('UserData/gm.txt', 'w') as f:
