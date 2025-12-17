@@ -96,6 +96,7 @@ def main():
             else:
                 players[name] = player.Player()
                 players[name].set_owner(message.author.id)
+                players[name].name = name
                 player_names.append(name)
                 with open('UserData/players.txt', 'w') as f:
                     f.write("\n".join(player_names))
@@ -157,8 +158,11 @@ def main():
         if message.content.startswith("!load"):
             user = message.author
             player_name = message.content[6:]
-            users_loaded[user.id] = players[player_name]
-            await message.channel.send(f'Loaded player {player_name} to {user.name}')
+            if players[player_name].is_owner(user.id):
+                users_loaded[user.id] = players[player_name]
+                await message.channel.send(f'Loaded player {player_name} to {user.name}')
+            else:
+                await message.channel.send('You do not own this player')
 
     # 3. Run it
     client.run(input('Enter your token: '))
