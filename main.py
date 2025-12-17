@@ -79,7 +79,7 @@ def main():
             ''')
 
         if message.content.startswith("!showplayers"):
-            if player_names != [] or player_names != [""]:
+            if player_names != [] and player_names != [""]:
                 await message.channel.send("\n".join(player_names))
             else:
                 await message.channel.send("None have been made! Make some with !create <name>")
