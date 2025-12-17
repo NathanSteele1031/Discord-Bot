@@ -180,6 +180,30 @@ def main():
             else:
                 await message.channel.send('You do not own this player')
 
+        if message.content.startswith("!addskill"):
+            if message.content.strip() == '!addskill' and not user_loaded(message.author.id, users_loaded):
+                await message.channel.send('Please specify a player name')
+            elif user_loaded(message.author.id, users_loaded):
+                message_split = message.content.split(' ')
+                if len(message_split) != 3:
+                    await message.channel.send('Please specify a skill and level with spaces (!addskill skillname level)')
+                player_data = users_loaded[message.author.id]
+                player_data.skills.append([message_split[1], int(message_split[2])])
+                player_data.save(f"UserData/{player_data.name}.json")
+                await message.channel.send(f'Added {message.content[11:]} to {player_data.name}')
+                return
+            
+            message_split = message.content.split(' ')
+            name = message_split[1]
+            if name in players and (players[name].is_owner(message.author.id) or message.author.id == is_gm(message.author.id, gm_id)):
+                players[name].skills.append([message_split[2], int(message_split[3])])
+                players[name].save(f"UserData/{name}.json")
+                await message.channel.send(f'Added {message_split[2]} to {name}')
+            elif name in players and message.author.id != is_gm(message.author.id, gm_id):
+                await message.channel.send('You do not own this player')
+            else:
+                await message.channel.send('Player not found')
+
         if message.content.startswith("!gmme"):
             gm_id = message.author.id
             save_gm_id(gm_id)
