@@ -135,14 +135,12 @@ def main():
         if message.content.startswith("!levelup"):
             if message.content.strip() == '!levelup' and not user_loaded(message.author.id, users_loaded):
                 await message.channel.send('Please specify a player name')
-            elif user_loaded(message.author.id, users_loaded):
-                player_data = users_loaded[message.author.id]
-                player_data.level += 1
-                player_data.save(f"UserData/{player_data.name}.json")
-                await message.channel.send(f'⭐⭐{player_data.name} has leveled up to level {player_data.level}⭐⭐')
-                return
             
-            name = message.content[9:]
+            if user_loaded(message.author.id, users_loaded):
+                player_data = users_loaded[message.author.id]
+                name = player_data.name
+            else:
+                name = message.content[9:]
             if name in players:
                 players[name].level += 1
                 players[name].save(f"UserData/{name}.json")
