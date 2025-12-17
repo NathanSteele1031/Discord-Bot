@@ -143,8 +143,12 @@ def main():
                 name = message.content[9:]
             if name in players:
                 players[name].level += 1
+
                 players[name].save(f"UserData/{name}.json")
+                skills_unlocked = players[name].skills_unlocked()
                 await message.channel.send(f'⭐⭐{name} has leveled up to level {players[name].level}⭐⭐')
+                if skills_unlocked != []:
+                    await message.channel.send(f'You have unlocked the following skills: {", ".join(skills_unlocked)}')
             else:
                 await message.channel.send('Player not found')
 
