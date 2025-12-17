@@ -11,6 +11,15 @@ class Player:
         else:
             self.load(file)
     
+    def skills_unlocked(self):
+        skills_unlocked = []
+
+        for skill, level in self.skills:
+            if level == self.level:
+                skills_unlocked.append(skill)
+
+        return skills_unlocked
+
     def set_owner(self, owner):
         """
         The value of owner should be a discord user id
