@@ -90,12 +90,12 @@ def main():
                 return
             elif user_loaded(message.author.id, users_loaded):
                 player_data = users_loaded[message.author.id]
-                await message.channel.send(f'Level: {player_data.level}\nItems: {player_data.items}')
+                await message.channel.send(f'Level: {player_data.level}\nItems: {player_data.items}\nSkills: {player_data.skills}')
                 return
 
             name = message.content[6:]
             if name in players:
-                await message.channel.send(f'Level: {players[name].level}\nItems: {players[name].items}')
+                await message.channel.send(f'Level: {players[name].level}\nItems: {players[name].items}\nSkills: {players[name].skills}')
             else:
                 await message.channel.send('Player not found')
 
